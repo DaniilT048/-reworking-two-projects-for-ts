@@ -1,5 +1,3 @@
-'use strict';
-
 type Users = {
     index:number;
     isActive: boolean;
@@ -126,38 +124,6 @@ const duplicatesUserName = (allUsers:Users[]):Users[] => {
 }
 console.log(duplicatesUserName(users));
 
-
-
-
-// Написати функції для наступних дій:
-
-// #1 Повернути масив телефонних номерів користувачів, у яких баланс менше ніж 2000 доларів.
-// #2 Знайти суму всіх балансів користувачів
-// #3 Знайти користувача з максімальним балансом, вивести його
-// #4 Вивести користувачів з повторюючимися іменами
-
-//OLD ATTEMPTS
-
-// const getUsersNormalizedBalance = () => {
-//   return users.map( user => ({
-//     ...user,
-//     balanceNum: Number(user.balance.replace('$','').replace(',',''))
-//   }))
-// }
-// console.log(getUsersNormalizedBalance());
-//
-// users['balanceNumber'] = getUsersNormalizedBalance();
-// console.log(users);
-//
-//
-//
-// const duplicateTest = (value, index, array) => array.indexOf(value) !== index;
-// const duplicatesUserName = (allUsers) => {
-//   const usersNames = allUsers.map(user => user.name);
-//   const duplicatesNames = usersNames.filter((value, index, array) => array.indexOf(value) !== index)
-//   return allUsers.filter(user => duplicatesNames.includes(user.name));
-// }
-// console.log(duplicatesUserName(users));
 
 
 
