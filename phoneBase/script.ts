@@ -115,7 +115,7 @@ const maxBalance = (userParam: Users[]):number[] => {
 console.log(maxBalance(users));
 
 
-function duplicatesFilter(value, index, array) {
+function duplicatesFilter<T>(value: T, index:number, array:T[]):boolean {
   return array.indexOf(value) !== index;
 }
 
