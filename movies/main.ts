@@ -29,18 +29,18 @@ async function onInputText():Promise<void> {
         return;
     }
     try{
-        const movies = await onSearchMovie(inputMoveElement.value);
+        const movies:SearchMove[] = await onSearchMovie(inputMoveElement.value);
         movieContainerElement.innerHTML = movies.map(movie => getHtmlForMovie(movie)).join('');
-    }catch(error: unknown){
+    }catch(RespResult: unknown){
         const error = RespResult as Error;
         errorContainerElement.innerHTML = `<div class="error">${error.message}</div>`;
     }
 }
 
 
-async function onSearchMovie(searchKey: string):Promise<void> {
+async function onSearchMovie(searchKey: string):Promise<SearchMove[]> {
     const url = `${BASE_URL}?apikey=${API_KEY}&s=${searchKey}`;
-   const movieData = await fetch(url)
+   const movieData: any = await fetch(url)
        .then(res   => res.json())
         .then(response => {
             if (response.Response === 'False') {
