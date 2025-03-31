@@ -12,12 +12,19 @@ enum RespResult{
     False = 'False'
 }
 
+type SearchResponse = {
+    Search: SearchMove[];
+    totalResults: string;
+    Response: RespResult;
+    Error?: string;
+}
+
 type SearchMove = {
-    Title: string,
-    Year: string,
-    imdbID: string,
-    Type: string,
-    Poster: string
+    Title: string;
+    Year: string;
+    imdbID: string;
+    Type: string;
+    Poster: string;
 }
 
 async function onInputText():Promise<void> {
@@ -29,26 +36,34 @@ async function onInputText():Promise<void> {
         return;
     }
     try{
-        const movies:SearchMove[] = await onSearchMovie(inputMoveElement.value);
+        const movies:SearchMove[] = await onSearchMovie(searchText);
         movieContainerElement.innerHTML = movies.map(movie => getHtmlForMovie(movie)).join('');
-    }catch(RespResult: unknown){
-        const error = RespResult as Error;
-        errorContainerElement.innerHTML = `<div class="error">${error.message}</div>`;
+    }catch(error: unknown){
+       if(error instanceof Error){
+           errorContainerElement.innerHTML = `<div class="error">${error.message}</div>`;
+       }else{
+           errorContainerElement.innerHTML = `<div class="error">An unknown error occurred</div>`;
+       }
     }
 }
 
 
 async function onSearchMovie(searchKey: string):Promise<SearchMove[]> {
     const url = `${BASE_URL}?apikey=${API_KEY}&s=${searchKey}`;
-   const movieData: any = await fetch(url)
-       .then(res   => res.json())
-        .then(response => {
-            if (response.Response === 'False') {
-                throw Error(response.Error);
-            }
-            return response;
-        })
-    return movieData?.Search;
+
+    try{
+        const response: Response = await fetch(url);
+        if(!response.ok){
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        const movieData: SearchResponse = await response.json();
+        if(movieData.Response === RespResult.False || !movieData.Search){
+            throw new Error(movieData.Error || 'No movies found');
+        }
+        return movieData.Search;
+    } catch (error: unknown) {
+        throw new Error('Movies is not found');
+    }
 }
 
 
